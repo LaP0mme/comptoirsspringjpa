@@ -17,7 +17,6 @@ public interface CategorieRepository extends JpaRepository<Categorie, Integer> {
 	 * Recherche une catégorie par son libellé (unique)
 	 * @param libelle le libellé recherché
 	 * @return Une catégorie avec ce libellé
-	 * test
 	 */
 	Categorie findByLibelle(String libelle);	
 	/**

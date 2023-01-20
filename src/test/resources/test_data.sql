@@ -13,7 +13,7 @@ INSERT INTO Produit(reference, nom, fournisseur, categorie_code, quantite_par_un
     ( 95, 'Produit 95 jamais commandé, disponible', 1, 98, '', 10.00, 100, 0, 10, FALSE),
     ( 96, 'Produit 96 jamais commandé, disponible', 1, 98, '', 10.00, 100, 0, 10, FALSE),
     ( 97, 'Produit 97 jamais commandé, indisponible', 1, 98, '', 10.00, 100, 0, 10, TRUE),
-    ( 98, 'Produit 98', 1, 98, '24 bouteilles (1 litre)', 95.00, 17, 40, 25, FALSE),
+    ( 98, 'Produit 98', 1, 98, '24 bouteilles (1 litre)', 95.00, 50, 40, 25, FALSE),
     ( 99, 'Produit 99', 1, 98, '12 bouteilles (550 ml)', 50.00, 13, 70, 25, FALSE);
 
 -- Un client sans commandes
@@ -31,4 +31,4 @@ INSERT INTO Ligne(commande_numero, produit_reference, quantite) VALUES ( 99999, 
 -- Cette commande n'a pas encore été livrée, on peut encore ajouter des lignes
 INSERT INTO Commande(numero, client_code, saisiele, envoyeele, port, destinataire, adresse, ville, region, code_postal, pays, remise) VALUES
     ( 99998, '2COM', '1994-11-29', NULL, 831.00, 'Bon app''', '12, rue des Bouchers', 'Marseille', NULL, '13008', 'France', 0.00);
-INSERT INTO Ligne(commande_numero, produit_reference, quantite) VALUES ( 99998, 98, 20);
+INSERT INTO Ligne(commande_numero, produit_reference, quantite) VALUES ( 99998, 98, 50);
