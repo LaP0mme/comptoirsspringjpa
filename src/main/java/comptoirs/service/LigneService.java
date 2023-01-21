@@ -45,35 +45,27 @@ public class LigneService {
      */
     @Transactional
    public Ligne ajouterLigne(Integer commandeNum, Integer produitRef, @Positive int quantite) {
-        if(quantite > 0){
-        // verification que la commande existe
-        var commande = commandeDao.findById(commandeNum).orElseThrow();
-        // verification du produit
-        var produit = produitDao.findById(produitRef).orElseThrow();
-        if(commande.getEnvoyeele()==null){
-            for(Ligne l : commande.getLignes()){
-                if(l.getProduit().getUnitesEnStock() < l.getQuantite()){
-                throw new UnsupportedOperationException("pas assez de produits en stock");
-                }
+        Ligne nouvelleLigne = null;
+        if (quantite > 0) {
+            // verification que la commande existe
+            var commande = commandeDao.findById(commandeNum).orElseThrow();
+            // verification du produit
+            var produit = produitDao.findById(produitRef).orElseThrow();
+            //verification que la commande n'est pas déjà partie
+            if (commande.getEnvoyeele() != null) {
+                throw new UnsupportedOperationException("la commande a déjà été envoyée");
             }
-        }
-        else{
-            throw new UnsupportedOperationException("la commande a déjà été envoyée");
-        }
             // calcul du nouveau total des Unités commandées
-            produit.setUnitesCommandees(produit.getUnitesCommandees()+quantite);
+            produit.setUnitesCommandees(produit.getUnitesCommandees() + quantite);
             // creation de la nouvelle ligne
-            Ligne nouvelleLigne = new Ligne(commande,produit,quantite);
+            nouvelleLigne = new Ligne(commande, produit, quantite);
             // ajout de la nouvelle ligne dans la commande
             List<Ligne> listeLignes = commande.getLignes();
             listeLignes.add(nouvelleLigne);
             commande.setLignes(listeLignes);
-            //sauvegrade des Dao
-            ligneDao.save(nouvelleLigne);
-            return nouvelleLigne;
         }
-        else{
-            throw new UnsupportedOperationException("la quantité doit être positive");
-        }
-   }
+        //sauvegrade des Dao
+        ligneDao.save(nouvelleLigne);
+        return nouvelleLigne;
+    }
 }

@@ -67,24 +67,23 @@ public class CommandeService {
     public Commande enregistreExpédition(Integer commandeNum) {
         // On vérifie que la commande existe
         var commande = commandeDao.findById(commandeNum).orElseThrow();
-        if(commande.getEnvoyeele()==null){
-            commande.setEnvoyeele(LocalDate.now());
-           for(Ligne l : commande.getLignes()){
-               if(l.getProduit().getUnitesEnStock() < l.getQuantite()) {
-                   throw new UnsupportedOperationException("il n'y a pas assez de " + l.getProduit() +
-                           " pour que la commande soit validé");
-               }
-               if(l.getProduit().getUnitesEnStock() > l.getQuantite()){
-                   l.getProduit().setUnitesEnStock(l.getProduit().getUnitesEnStock() - l.getQuantite());
-               }
-
-
-           }
-
-        }
-        else{
+        if(commande.getEnvoyeele()!=null){
             throw new UnsupportedOperationException("la commande a déjà été validé");
         }
+        if(commande.getEnvoyeele()==null){
+            commande.setEnvoyeele(LocalDate.now());
+            var lignesCommande = commande.getLignes();
+            for(int i = 0; i < lignesCommande.size(); i++){
+                if(lignesCommande.get(i).getProduit().getUnitesEnStock() < lignesCommande.get(i).getQuantite()) {
+                    throw new UnsupportedOperationException("il n'y a pas assez de " + lignesCommande.get(i).getProduit() +
+                            " pour que la commande soit validé");
+                }
+                var produit = lignesCommande.get(i).getProduit();
+                produit.setUnitesEnStock(produit.getUnitesEnStock() - lignesCommande.get(i).getQuantite());
+            }
+
+        }
         commandeDao.save(commande);
-        return commande; }
+        return commande;
+    }
 }

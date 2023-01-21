@@ -52,26 +52,25 @@ class LigneServiceTest {
     }
     @Test
     void testAjouterLigneDejaLivree(){
+        // on teste qu'on ne peut pas ajouter une ligne dans une commande déjà envoyée
         assertThrows(UnsupportedOperationException.class, () ->
                 service.ajouterLigne(NUMERO_COMMANDE_DEJA_LIVREE,98,1));
     }
     @Test
     void testAjouterLigneQuantiteNegative(){
-        assertThrows(UnsupportedOperationException.class, () ->
-                service.ajouterLigne(NUMERO_COMMANDE_PAS_LIVREE,98,0));
-    }
-    @Test
-    void testAjouterLignePasAssezDeProduits(){
-        assertThrows(UnsupportedOperationException.class, () ->
-                service.ajouterLigne(NUMERO_COMMANDE_PAS_LIVREE,98,900));
+        //on teste qu'on ne peut pas jouter une quantité négative de produits dans une ligne de commande
+        assertThrows(jakarta.validation.ConstraintViolationException.class, () ->
+                service.ajouterLigne(NUMERO_COMMANDE_PAS_LIVREE,98,-1));
     }
     @Test
     void testAjouterLigneProduitInexistant(){
+        // on teste qu'on ne peut pas ajouter une ligne dans une commande si le produit n'existe pas
         assertThrows(NoSuchElementException.class, () ->
                 service.ajouterLigne(NUMERO_COMMANDE_PAS_LIVREE,1029,1));
     }
     @Test
     void testAjouterLigneCommandeInexistante(){
+        //on teste qu'on ne peut pas ajouter une ligne a une commande n'existant pas
         assertThrows(NoSuchElementException.class, () ->
                 service.ajouterLigne(-1,98,1));
     }
